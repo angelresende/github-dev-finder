@@ -56,6 +56,7 @@ O projeto é configurado para rodar em um ambiente Docker, incluindo os serviço
 ```bash
 git clone https://github.com/angelresende/github-dev-finder.git
 cd github-dev-finder
+```
 
 2.  **Configurar o Arquivo `.env`:**
     Duplique o arquivo `.env.example` para `.env` e configure as variáveis de ambiente. As configurações de banco de dados no `docker-compose.yml` são:
@@ -76,11 +77,13 @@ cd github-dev-finder
     ```bash
     docker-compose up -d --build
     docker-compose exec app composer install
+    ```
 
 5. **Configuração Final do Laravel:**
     ```bash
     docker-compose exec app php artisan key:generate
     docker-compose exec app php artisan migrate --seed # Cria o esquema de usuários
+    ```
 
 6.  **A aplicação estará disponível em:** `http://localhost:8080`.
 
