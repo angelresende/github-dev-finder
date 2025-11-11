@@ -1,59 +1,90 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## 🚀 Desafio Técnico: GitHub Developer Finder
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Este projeto tem como objetivo construir uma interface web segura, desenvolvida em **Laravel 12** com **PostgreSQL** no Docker, para que o CTO avalie e filtre desenvolvedores de código aberto, utilizando a API do GitHub.
 
-## About Laravel
+### 🎯 Visão Geral do Projeto
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+A aplicação oferece um sistema de login para acesso restrito. Após o login, o CTO tem acesso a uma lista de desenvolvedores, onde cada um é avaliado por um **Score de Avaliação** (métrica definida abaixo) e pode ser filtrado por parâmetros chave.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 📏 Métricas e Filtros de Avaliação
 
-## Learning Laravel
+A avaliação de um desenvolvedor é feita através de um Score numérico, e a listagem pode ser refinada com filtros.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+#### **Métrica de Avaliação (Score)**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+O Score é calculado usando a seguinte fórmula, priorizando engajamento e produção de código:
 
-## Laravel Sponsors
+$$S = (\text{Followers} \times 0.4) + (\text{Public Repos} \times 0.3) + (\text{Total Stars} \times 0.3)$$
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Onde:
+* **Followers:** Contribui para o alcance e popularidade do desenvolvedor.
+* **Public Repos:** Contribui para a produtividade e volume de trabalho.
+* **Total Stars:** Contribui para a qualidade e reconhecimento dos projetos.
 
-### Premium Partners
+#### **Filtros Disponíveis**
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+* **Linguagem Principal:** Filtra desenvolvedores com maior atividade em uma linguagem específica (ex: PHP, JavaScript).
+* **Localização:** Filtra por região ou país de residência.
+* **Score Mínimo:** Exibe apenas desenvolvedores que atinjam um limite de pontuação pré-definido.
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 🏗️ Estrutura da Arquitetura
 
-## Code of Conduct
+O projeto utiliza o padrão **Repository/Service/Controller** para garantir a separação de responsabilidades, testabilidade e manutenibilidade do código.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+| Camada | Responsabilidade |
+| :--- | :--- |
+| **Controller** (`App\Http\Controllers`) | Recebe requisições HTTP, valida dados, e chama a camada de `Service`. Retorna a resposta (JSON ou View). |
+| **Service** (`App\Services`) | Contém a lógica de negócio **principal**, incluindo o cálculo do Score e a orquestração de dados. |
+| **Repository** (`App\Repositories`) | Lida com a persistência e a recuperação de dados de **fontes externas**, como a **API do GitHub** ou o cache. |
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### ⚙️ Instalação e Execução (Docker)
 
-## License
+O projeto é configurado para rodar em um ambiente Docker, incluindo os serviços de **PHP/Laravel**, **Nginx** e **PostgreSQL**.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+#### **Pré-requisitos**
+* **Docker**
+* **Docker Compose**
+
+#### **Passo 1: Clonar o Repositório**
+
+```bash
+git clone https://github.com/angelresende/github-dev-finder.git
+cd github-dev-finder
+
+2.  **Configurar o Arquivo `.env`:**
+    Duplique o arquivo `.env.example` para `.env` e configure as variáveis de ambiente. As configurações de banco de dados no `docker-compose.yml` são:
+    ```env
+    DB_CONNECTION=pgsql
+    DB_HOST=pgsql
+    DB_PORT=5432
+    DB_DATABASE=beer_and_code_challenge
+    DB_USERNAME=beerAndCode
+    DB_PASSWORD=beerAndCode
+    ```
+
+3.  **Configuração da API do GitHub:**
+    Obtenha um Personal Access Token no GitHub (para evitar limites de taxa) e adicione-o:
+    GITHUB_TOKEN=SEU_TOKEN_AQUI
+
+4. **Construir e Iniciar os Contêineres:**
+    ```bash
+    docker-compose up -d --build
+    docker-compose exec app composer install
+
+5. **Configuração Final do Laravel:**
+    ```bash
+    docker-compose exec app php artisan key:generate
+    docker-compose exec app php artisan migrate --seed # Cria o esquema de usuários
+
+6.  **A aplicação estará disponível em:** `http://localhost:8080`.
+
+
+**✍️ Autoria**
+
+Desenvolvido por: Angélica Resende
